@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>„”«⁄œ «·„ﬂ›Ê›Ì‰ - «·ﬂ«„Ì—« «·–ﬂÌ…</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            touch-action: manipulation;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .camera-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .camera-preview {
+            width: 100%;
+            height: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .camera-placeholder {
+            width: 90%;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 18px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .controls {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .main-button {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            border: none;
+            padding: 20px;
+            border-radius: 50px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+            min-height: 70px;
+        }
+
+        .main-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+        }
+
+        .main-button:active {
+            transform: translateY(0);
+        }
+
+        .secondary-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 15px;
+            border-radius: 25px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .description-panel {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .description-text {
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: right;
+        }
+
+        .feature-indicators {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4ade80;
+        }
+
+        .indicator-dot.inactive {
+            background: #6b7280;
+        }
+
+        .voice-control {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #10b981, #059669);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .voice-control:hover {
+            transform: scale(1.1);
+        }
+
+        .voice-control.listening {
+            animation: pulse 1.5s infinite;
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .accessibility-text {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .secondary-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .main-button {
+                font-size: 18px;
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>?? „”«⁄œ «·„ﬂ›Ê›Ì‰ «·–ﬂÌ</h1>
+        <div class="status" id="status">Ã«Â“ ··«” Œœ«„</div>
+    </div>
+
+    <div class="feature-indicators">
+        <div class="indicator">
+            <div class="indicator-dot" id="camera-dot"></div>
+            <span>«·ﬂ«„Ì—«</span>
+        </div>
+        <div class="indicator">
+            <div class="indicator-dot" id="voice-dot"></div>
+            <span>«·’Ê </span>
+        </div>
+        <div class="indicator">
+            <div class="indicator-dot" id="ai-dot"></div>
+            <span>«·–ﬂ«¡ «·«’ÿ‰«⁄Ì</span>
+        </div>
+    </div>
+
+    <div class="camera-container">
+        <video class="camera-preview" id="cameraPreview" style="display: none;" autoplay muted></video>
+        <div class="camera-placeholder" id="cameraPlaceholder">
+            <div style="font-size: 48px; margin-bottom: 20px;">??</div>
+            <p>«÷€ÿ ⁄·Ï " ‘€Ì· «·ﬂ«„Ì—«" ·»œ¡ «·„”Õ «·÷Ê∆Ì</p>
+            <p style="font-size: 14px; margin-top: 10px; opacity: 0.8;">”Ì „ Ê’› «·„ÕÌÿ ’Ê Ì«</p>
+        </div>
+    </div>
+
+    <div class="description-panel" id="descriptionPanel" style="display: none;">
+        <div class="description-text" id="descriptionText">
+            ·«  ÊÃœ „⁄·Ê„«  „ «Õ… Õ«·Ì«
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="main-button" id="mainButton" onclick="toggleCamera()">
+            ??  ‘€Ì· «·ﬂ«„Ì—«
+        </button>
+        
+        <div class="secondary-buttons">
+            <button class="secondary-button" onclick="analyzeScene()">
+                ??  Õ·Ì· «·„‘Âœ
+            </button>
+            <button class="secondary-button" onclick="detectObstacles()">
+                ?? ﬂ‘› «·⁄ﬁ»« 
+            </button>
+            <button class="secondary-button" onclick="identifyPeople()">
+                ??  ÕœÌœ «·√‘Œ«’
+            </button>
+            <button class="secondary-button" onclick="recognizeCurrency()">
+                ?? «· ⁄—› ⁄·Ï «·⁄„·« 
+            </button>
+        </div>
+    </div>
+
+    <button class="voice-control" id="voiceButton" onclick="toggleVoiceControl()">
+        ??
+    </button>
+
+    <!-- ‰’Ê’ ≈„ﬂ«‰Ì… «·Ê’Ê· -->
+    <div class="accessibility-text">
+        <p> ÿ»Ìﬁ „”«⁄œ «·„ﬂ›Ê›Ì‰ ·· ⁄—› ⁄·Ï «·„ÕÌÿ »«” Œœ«„ «·ﬂ«„Ì—«</p>
+        <p>Ì„ﬂ‰ «· Õﬂ„ »«· ÿ»Ìﬁ ’Ê Ì« √Ê »«··„”</p>
+    </div>
+
+    <script>
+        let cameraActive = false;
+        let voiceListening = false;
+        let stream = null;
+        let recognition = null;
+
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.lang = 'ar-SA';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+        }
+
+        // Initialize text-to-speech
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ar-SA';
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        async function toggleCamera() {
+            const button = document.getElementById('mainButton');
+            const preview = document.getElementById('cameraPreview');
+            const placeholder = document.getElementById('cameraPlaceholder');
+            const status = document.getElementById('status');
+            const cameraDot = document.getElementById('camera-dot');
+
+            if (!cameraActive) {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            facingMode: 'environment',
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        } 
+                    });
+                    
+                    preview.srcObject = stream;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    
+                    button.textContent = '?? ≈Ìﬁ«› «·ﬂ«„Ì—«';
+                    status.textContent = '«·ﬂ«„Ì—« ‰‘ÿ… - Ã«Â“ ·· Õ·Ì·';
+                    cameraDot.classList.remove('inactive');
+                    
+                    cameraActive = true;
+                    speak(' „  ‘€Ì· «·ﬂ«„Ì—« »‰Ã«Õ');
+                    
+                    // Auto-analyze every 5 seconds
+                    setTimeout(() => {
+                        if (cameraActive) {
+                            analyzeScene();
+                        }
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error('Œÿ√ ›Ì  ‘€Ì· «·ﬂ«„Ì—«:', error);
+                    status.textContent = 'Œÿ√ ›Ì «·Ê’Ê· ··ﬂ«„Ì—«';
+                    speak('⁄–—«° ·« Ì„ﬂ‰ «·Ê’Ê· ··ﬂ«„Ì—«');
+                }
+            } else {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                
+                preview.style.display = 'none';
+                placeholder.style.display = 'flex';
+                button.textContent = '??  ‘€Ì· «·ﬂ«„Ì—«';
+                status.textContent = ' „ ≈Ìﬁ«› «·ﬂ«„Ì—«';
+                cameraDot.classList.add('inactive');
+                
+                cameraActive = false;
+                speak(' „ ≈Ìﬁ«› «·ﬂ«„Ì—«');
+            }
+        }
+
+        function analyzeScene() {
+            if (!cameraActive) {
+                speak('Ì—ÃÏ  ‘€Ì· «·ﬂ«„Ì—« √Ê·«');
+                return;
+            }
+
+            const panel = document.getElementById('descriptionPanel');
+            const text = document.getElementById('descriptionText');
+            
+            panel.style.display = 'block';
+            text.textContent = 'Ã«—Ì  Õ·Ì· «·„‘Âœ...';
+            
+            // Simulate AI analysis
+            setTimeout(() => {
+                const mockAnalysis = generateMockAnalysis();
+                text.textContent = mockAnalysis;
+                speak(mockAnalysis);
+            }, 2000);
+        }
+
+        function detectObstacles() {
+            if (!cameraActive) {
+                speak('Ì—ÃÏ  ‘€Ì· «·ﬂ«„Ì—« √Ê·«');
+                return;
+            }
+
+            const obstacles = [
+                'ÌÊÃœ ⁄«∆ﬁ ⁄·Ï »⁄œ „ —Ì‰ √„«„ﬂ - Ì»œÊ ﬂ’‰œÊﬁ √Ê Õ«Ã“ „‰Œ›÷',
+                '„ÿ» ›Ì «·ÿ—Ìﬁ ⁄·Ï »⁄œ Œ„”… √„ «—',
+                'œ—Ã… „‰Œ›÷… √„«„ﬂ „»«‘—… - «Õ–—',
+                '«·ÿ—Ìﬁ Ê«÷Õ √„«„ﬂ ·„”«›… ⁄‘—… √„ «—',
+                'ÌÊÃœ ⁄„Êœ ≈‰«—… ⁄·Ï Ì”«—ﬂ'
+            ];
+            
+            const randomObstacle = obstacles[Math.floor(Math.random() * obstacles.length)];
+            updateDescription('?? ﬂ‘› «·⁄ﬁ»« : ' + randomObstacle);
+            speak(' Õ–Ì—: ' + randomObstacle);
+        }
+
+        function identifyPeople() {
+            if (!cameraActive) {
+                speak('Ì—ÃÏ  ‘€Ì· «·ﬂ«„Ì—« √Ê·«');
+                return;
+            }
+
+            const peopleDetection = [
+                'ÌÊÃœ ‘Œ’ Ê«Õœ √„«„ﬂ ⁄·Ï »⁄œ À·«À… √„ «—',
+                'ÌÊÃœ ‘Œ’«‰ Ì”Ì—«‰ ›Ì « Ã«Âﬂ',
+                '·« ÌÊÃœ √‘Œ«’ ›Ì «·„Ã«· «·„—∆Ì Õ«·Ì«',
+                '„Ã„Ê⁄… „‰ «·√‘Œ«’ ⁄·Ï Ì„Ì‰ﬂ',
+                '‘Œ’ Ìﬁ› »«·ﬁ—» „‰ «·„œŒ·'
+            ];
+            
+            const detection = peopleDetection[Math.floor(Math.random() * peopleDetection.length)];
+            updateDescription('?? ﬂ‘› «·√‘Œ«’: ' + detection);
+            speak(detection);
+        }
+
+        function recognizeCurrency() {
+            if (!cameraActive) {
+                speak('Ì—ÃÏ  ‘€Ì· «·ﬂ«„Ì—« √Ê·«');
+                return;
+            }
+
+            const currencies = [
+                'Ê—ﬁ… ‰ﬁœÌ… ›∆… 1000 œÌ‰«— ⁄—«ﬁÌ',
+                'Ê—ﬁ… ‰ﬁœÌ… ›∆… 500 œÌ‰«— ⁄—«ﬁÌ',
+                '⁄„·… „⁄œ‰Ì… 250 œÌ‰«— ⁄—«ﬁÌ',
+                'Ê—ﬁ… ‰ﬁœÌ… ›∆… 25000 œÌ‰«— ⁄—«ﬁÌ',
+                '·« Ì„ﬂ‰ «· ⁄—› ⁄·Ï ⁄„·… Ê«÷Õ… ›Ì «·’Ê—…'
+            ];
+            
+            const currency = currencies[Math.floor(Math.random() * currencies.length)];
+            updateDescription('?? «· ⁄—› ⁄·Ï «·⁄„·…: ' + currency);
+            speak(' „ «·⁄ÀÊ— ⁄·Ï: ' + currency);
+        }
+
+        function generateMockAnalysis() {
+            const scenes = [
+                '√‰  ›Ì „ﬂ«‰ „› ÊÕ° ÌÊÃœ ÿ—Ìﬁ √”›· Ì √„«„ﬂ. Ì„ﬂ‰ —ƒÌ… „»«‰Ì ⁄·Ï «·Ã«‰»Ì‰. «·ÿﬁ” Ì»œÊ ’«›Ì« Ê«·≈÷«¡… ÃÌœ….',
+                ' ﬁ› √„«„ „»‰Ï° ÌÊÃœ »«» —∆Ì”Ì Ê⁄œ… ‰Ê«›–. Â‰«ﬂ œ—Ã«   ƒœÌ ··„œŒ·. ÌÊÃœ √‘Œ«’ Ì Õ—ﬂÊ‰ ›Ì «·„‰ÿﬁ….',
+                '√‰  ›Ì ‘«—⁄  Ã«—Ì° Ì„ﬂ‰ —ƒÌ… „Õ·«  ⁄·Ï «·Ã«‰»Ì‰. Â‰«ﬂ Õ—ﬂ… „—Ê— Œ›Ì›… Ê√—’›… Ê«÷Õ… ··„‘«….',
+                '„ﬂ«‰ œ«Œ·Ì Ê«”⁄° Ì»œÊ ﬂ„ÿ«— √Ê „Õÿ…. ”ﬁ› ⁄«·Ì Ê≈÷«¡… «’ÿ‰«⁄Ì… ÃÌœ…. ÌÊÃœ ·«› «  ≈—‘«œÌ….'
+            ];
+            
+            return scenes[Math.floor(Math.random() * scenes.length)];
+        }
+
+        function updateDescription(text) {
+            const panel = document.getElementById('descriptionPanel');
+            const textElement = document.getElementById('descriptionText');
+            
+            panel.style.display = 'block';
+            textElement.textContent = text;
+        }
+
+        function toggleVoiceControl() {
+            const button = document.getElementById('voiceButton');
+            const voiceDot = document.getElementById('voice-dot');
+            
+            if (!voiceListening && recognition) {
+                recognition.start();
+                button.classList.add('listening');
+                voiceDot.classList.remove('inactive');
+                voiceListening = true;
+                speak('√ ÕœÀ «·¬‰° „«–«  —Ìœø');
+                
+                recognition.onresult = function(event) {
+                    const command = event.results[0][0].transcript.toLowerCase();
+                    handleVoiceCommand(command);
+                };
+                
+                recognition.onend = function() {
+                    button.classList.remove('listening');
+                    voiceDot.classList.add('inactive');
+                    voiceListening = false;
+                };
+                
+            } else if (voiceListening) {
+                recognition.stop();
+            }
+        }
+
+        function handleVoiceCommand(command) {
+            if (command.includes('ﬂ«„Ì—«') || command.includes(' ‘€Ì·')) {
+                toggleCamera();
+            } else if (command.includes(' Õ·Ì·') || command.includes('Ê’›')) {
+                analyzeScene();
+            } else if (command.includes('⁄ﬁ»« ') || command.includes('„ÿ»« ')) {
+                detectObstacles();
+            } else if (command.includes('√‘Œ«’') || command.includes('‰«”')) {
+                identifyPeople();
+            } else if (command.includes('⁄„·…') || command.includes('‰ﬁÊœ')) {
+                recognizeCurrency();
+            } else {
+                speak('·„ √›Â„ «·√„—. Ì„ﬂ‰ﬂ ﬁÊ·:  ‘€Ì· «·ﬂ«„Ì—«°  Õ·Ì· «·„‘Âœ° ﬂ‘› «·⁄ﬁ»« °  ÕœÌœ «·√‘Œ«’° √Ê «· ⁄—› ⁄·Ï «·⁄„·« ');
+            }
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            speak('„—Õ»« »ﬂ ›Ì  ÿ»Ìﬁ „”«⁄œ «·„ﬂ›Ê›Ì‰. «÷€ÿ ⁄·Ï «·‘«‘… √Ê «” Œœ„ «·√Ê«„— «·’Ê Ì… ·· Õﬂ„');
+            
+            // Set initial indicators
+            document.getElementById('camera-dot').classList.add('inactive');
+            document.getElementById('voice-dot').classList.add('inactive');
+            document.getElementById('ai-dot').classList.remove('inactive');
+        });
+
+        // Handle screen tap for accessibility
+        document.addEventListener('click', function(e) {
+            if (e.target === document.body) {
+                speak(' ÿ»Ìﬁ „”«⁄œ «·„ﬂ›Ê›Ì‰. «” Œœ„ «·√“—«— √Ê «·√Ê«„— «·’Ê Ì… ·· Õﬂ„');
+            }
+        });
+    </script>
+</body>
+</html>
